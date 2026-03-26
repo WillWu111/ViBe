@@ -1,7 +1,7 @@
 # ViBe
 # **ViBe: Ultra-High-Resolution Video Synthesis Born from Pure Images** 🎥✨
 
-[![arXiv](https://img.shields.io/badge/arXiv-2511.14712-b31b1b.svg)](https://arxiv.org/pdf/2603.23326)
+[![arXiv](https://img.shields.io/badge/arXiv-2603.23326-b31b1b.svg)](https://arxiv.org/pdf/2603.23326)
 
 <!-- Teaser 放在比较靠前的位置 -->
 ![Teaser – Ultra-High-Resolution Results](assets/teaser.png)
