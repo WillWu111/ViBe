@@ -1,4 +1,3 @@
-# ViBe
 # **ViBe: Ultra-High-Resolution Video Synthesis Born from Pure Images** 🎥✨
 
 [![arXiv](https://img.shields.io/badge/arXiv-2603.23326-b31b1b.svg)](https://arxiv.org/pdf/2603.23326)
