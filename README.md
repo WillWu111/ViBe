@@ -4,7 +4,7 @@
 [![arXiv](https://img.shields.io/badge/arXiv-2511.14712-b31b1b.svg)](https://arxiv.org/pdf/2603.23326)
 
 <!-- Teaser 放在比较靠前的位置 -->
-![Teaser – Ultra-High-Resolution Results](assets/teaser.jpg)
+![Teaser – Ultra-High-Resolution Results](assets/teaser.png)
 
 <p align="center"><em>Teaser: ViBe generates ultra-high-resolution videos with rich details and coherent global structure. ✨</em></p>
 
@@ -31,7 +31,7 @@ Extensive experiments on modern video DiTs, such as **Wan2.2**, show that ViBe c
 
 
 <!-- 方法架构图放在 Methodology 下面 -->
-![FreeSwim Framework](assets/method.jpg)
+![FreeSwim Framework](assets/method.png)
 
 <p align="center"><em>Figure: Overview of the ViBe framework. 🧩</em></p>
 
