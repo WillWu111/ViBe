@@ -31,7 +31,7 @@ Extensive experiments on modern video DiTs, such as **Wan2.2**, show that ViBe c
 
 
 <!-- 方法架构图放在 Methodology 下面 -->
-![FreeSwim Framework](assets/method.png)
+![ViBe Framework](assets/method.png)
 
 <p align="center"><em>Figure: Overview of the ViBe framework. 🧩</em></p>
 
