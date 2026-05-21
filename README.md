@@ -49,7 +49,7 @@ We provide our trained LoRA models for ultra-high-resolution video synthesis. Yo
 
 | Model | Description | Download |
 |-------|-------------|----------|
-| ViBe LoRA | Relay LoRA for 4K video generation | [Download](https://huggingface.co/yunfengWu/ViBe) |
+| ViBe LoRA | Relay LoRA for high-resolution video generation | [Download](https://huggingface.co/yunfengWu/ViBe) |
 
 ## **Inference** 🚀
 
@@ -59,7 +59,7 @@ You can specify `target_height`, `target_width`, and `spatial_down_factor` as co
 python ViBe.py --target_height 1408 --target_width 2560 --spatial_down_factor 2
 ```
 
-**Note:** Ensure that the latent height and width are divisible by `spatial_down_factor`. The latent dimensions are calculated as `height // 32` and `width // 32` (due to VAE encoding), so `target_height // 32` and `target_width // 32` must be divisible by `spatial_down_factor`.
+**Note:** Ensure that the latent height and width are divisible by `spatial_down_factor`.
 
 ## **Training** 🏋️
 
