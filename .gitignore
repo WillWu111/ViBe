@@ -1,0 +1,15 @@
+*.safetensors
+*.pth
+*.pt
+*.ckpt
+*.bin
+*.mp4
+*.avi
+*.mov
+*.npy
+*.npz
+outputs/
+checkpoints/
+models/
+.cache/
+__pycache__/
