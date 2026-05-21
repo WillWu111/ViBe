@@ -21,18 +21,89 @@ Extensive experiments on modern video DiTs, such as **Wan2.2**, show that ViBe c
 
 ## **Methodology** 🧠
 
-- **Relay LoRA for Decoupled Adaptation**: 🔄 We introduce **Relay LoRA**, a two-stage adaptation strategy that first bridges the **image--video modality gap** at low resolution and then learns **spatial extrapolation** at high resolution, enabling high-resolution video synthesis while avoiding image-induced artifacts.
-
-- **Global-Coarse-Local-Fine Attention**: 🔍 We design **GCLF Attention**, which combines localized fine-grained modeling with compact global context aggregation, improving detail fidelity while preserving semantic consistency across ultra-high-resolution frames.
-
-- **High-Frequency-Awareness Training Objective**: ✨ We propose **HFATO**, a training objective that explicitly enhances the model’s ability to recover **high-frequency textures and structural details** from degraded latent inputs, leading to sharper and more realistic video generation results.
-
-
-
 <!-- 方法架构图放在 Methodology 下面 -->
 ![ViBe Framework](assets/method.jpg)
 
 <p align="center"><em>Figure: Overview of the ViBe framework. 🧩</em></p>
+
+## **Installation** 📦
+
+ViBe requires `torch==2.7.1` (for flex attention), and other packages listed in `requirements.txt`. You can set up a new experiment with:
+
+```bash
+conda create -n ViBe python=3.12
+conda activate ViBe
+cd DiffSynth-Studio-main
+pip install -e .
+```
+
+Clone this repo to your project directory:
+
+```bash
+git clone https://github.com/WillWu111/ViBe.git
+```
+
+## **Models** 🤖
+
+We provide our trained LoRA models for ultra-high-resolution video synthesis. You can download them from Hugging Face:
+
+| Model | Description | Download |
+|-------|-------------|----------|
+| ViBe LoRA | Relay LoRA for 4K video generation | [Download](https://huggingface.co/yunfengWu/ViBe) |
+
+## **Inference** 🚀
+
+You can specify `target_height`, `target_width`, and `spatial_down_factor` as command-line arguments:
+
+```bash
+python ViBe.py --target_height 1408 --target_width 2560 --spatial_down_factor 2
+```
+
+**Note:** Ensure that the latent height and width are divisible by `spatial_down_factor`. The latent dimensions are calculated as `height // 32` and `width // 32` (due to VAE encoding), so `target_height // 32` and `target_width // 32` must be divisible by `spatial_down_factor`.
+
+## **Training** 🏋️
+
+Our training loss functions are defined in [diffsynth/diffusion/loss.py](diffsynth/diffusion/loss.py). ViBe uses a two-stage training approach with different loss functions:
+
+### Stage 1: Modality Alignment (First Stage)
+
+```python
+# First Stage: Standard noise prediction
+def FlowMatchSFTLoss(pipe, **inputs):
+    timestep_id = torch.randint(min_timestep_boundary, max_timestep_boundary, (1,))
+    timestep = pipe.scheduler.timesteps[timestep_id]
+
+    noise = torch.randn_like(inputs["input_latents"])
+    x_noisy = pipe.scheduler.add_noise(inputs["input_latents"], noise, timestep)
+    training_target = pipe.scheduler.training_target(inputs["input_latents"], noise, timestep)
+
+    noise_pred = pipe.model_fn(**models, **inputs, timestep=timestep)
+    loss = mse_loss(noise_pred, training_target)
+    return loss
+```
+
+### Stage 2: Spatial Extrapolation (Second Stage)
+
+```python
+# Second Stage: x0 prediction with down-up cycle (HFATO)
+def FlowMatchSFTLoss(pipe, **inputs):
+    # Down-sample and up-sample x0 to create degraded input
+    x0_down = F.interpolate(x0, scale_factor=(1.0, 0.5, 0.5), mode="trilinear")
+    x0_up = F.interpolate(x0_down, size=(T, H, W), mode="trilinear")
+
+    # Add noise to degraded input
+    x_noisy = pipe.scheduler.add_noise(x0_up, noise, timestep)
+
+    # Predict flow and recover x0
+    flow_pred = pipe.model_fn(**models, **inputs, timestep=timestep)
+    x0_pred = x_noisy - sigma * flow_pred
+
+    # Loss: predict original x0 (not degraded x0_up)
+    loss = mse_loss(x0_pred, x0)
+    return loss
+```
+
+**Key Difference:** Stage 1 trains on original latents, while Stage 2 trains the model to recover high-frequency details from degraded latent inputs, enhancing the model's ability to synthesize fine textures.
 
 ## **Results** 🏆
 
