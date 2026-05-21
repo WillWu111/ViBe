@@ -28,7 +28,7 @@ Extensive experiments on modern video DiTs, such as **Wan2.2**, show that ViBe c
 
 ## **Installation** 📦
 
-ViBe requires `torch==2.7.1` (for flex attention), and other packages listed in `requirements.txt`. You can set up a new experiment with:
+ViBe requires `torch==2.7.1` (for flex attention). You can set up a new experiment with:
 
 ```bash
 conda create -n ViBe python=3.12
